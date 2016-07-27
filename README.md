@@ -1,7 +1,7 @@
-Grid Editor
+Grid Editor (Foundation 6 Version)
 ===========
 
-Grid Editor is a visual javascript editor for the [bootstrap grid system](http://getbootstrap.com/css/#grid), written as a [jQuery](http://jquery.com/) plugin.
+Grid Editor is a visual javascript editor for the [foundation grid system](http://foundation.zurb.com/sites/docs/grid.html), written as a [jQuery](http://jquery.com/) plugin.
 
 It provides integration plugins for the following rich text editors: TinyMCE, summernote and CKEditor.
 

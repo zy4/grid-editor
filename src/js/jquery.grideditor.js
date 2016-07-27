@@ -26,11 +26,11 @@ $.fn.gridEditor = function( options ) {
     self.each(function(baseIndex, baseElem) {
         baseElem = $(baseElem);
         
-        // Wrap content if it is non-bootstrap
+        // Wrap content if it is non-foundation
         if (baseElem.children().length && !baseElem.find('div.row').length) {
             var children = baseElem.children();
-            var newRow = $('<div class="row"><div class="col-md-12"/></div>').appendTo(baseElem);
-            newRow.find('.col-md-12').append(children);
+            var newRow = $('<div class="row"><div class="large-12 columns"/></div>').appendTo(baseElem);
+            newRow.find('large-12 columns').append(children);
         }
 
         var settings = $.extend({
@@ -66,7 +66,7 @@ $.fn.gridEditor = function( options ) {
             addRowGroup,
             htmlTextArea
         ;
-        var colClasses = ['col-md-', 'col-sm-', 'col-xs-'];
+        var colClasses = ['columns large-', 'columns medium-', 'columns small-'];
         var curColClassIndex = 0; // Index of the column class we are manipulating currently
         var MAX_COL_SIZE = 12;
 
@@ -116,15 +116,15 @@ $.fn.gridEditor = function( options ) {
                 var layoutName = layout.join(' - ');
                 var icon = '<div class="row ge-row-icon">';
                 layout.forEach(function(i) {
-                    icon += '<div class="column col-xs-' + i + '"/>';
+                    icon += '<div class="column columns small-' + i + '"/>';
                 });
                 icon += '</div>';
                 btn.append(icon);
             });
 
             // Buttons on right
-            var layoutDropdown = $('<div class="dropdown pull-right ge-layout-mode">' +
-                '<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown"><span>Desktop</span></button>' +
+            var layoutDropdown = $('<div class="dropdown right ge-layout-mode">' +
+                '<button type="button" class="button tiny dropdown-toggle" data-toggle="dropdown"><span>Desktop</span></button>' +
                 '<ul class="dropdown-menu" role="menu">' +
                     '<li><a data-width="auto" title="Desktop"><span>Desktop</span></a></li>' +
                     '<li><a title="Tablet"><span>Tablet</span></li>' +
@@ -140,10 +140,10 @@ $.fn.gridEditor = function( options ) {
                 })
                 .appendTo(wrapper)
             ;
-            var btnGroup = $('<div class="btn-group pull-right"/>')
+            var btnGroup = $('<div class="button-group right"/>')
                 .appendTo(wrapper)
             ;
-            var htmlButton = $('<button title="Edit Source Code" type="button" class="btn btn-xs btn-primary gm-edit-mode"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-right"></span></button>')
+            var htmlButton = $('<button title="Edit Source Code" type="button" class="button tiny gm-edit-mode"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-right"></span></button>')
                 .on('click', function() {
                     if (htmlButton.hasClass('active')) {
                         canvas.empty().html(htmlTextArea.val()).show();
@@ -163,12 +163,12 @@ $.fn.gridEditor = function( options ) {
                 })
                 .appendTo(btnGroup)
             ;
-            var previewButton = $('<button title="Preview" type="button" class="btn btn-xs btn-primary gm-preview"><span class="glyphicon glyphicon-eye-open"></span></button>')
+            var previewButton = $('<button title="Preview" type="button" class="button tiny gm-preview"><span class="glyphicon glyphicon-eye-open"></span></button>')
                 .on('mouseenter', function() {
                     canvas.removeClass('ge-editing');
                 })
                 .on('click', function() {
-                    previewButton.toggleClass('active btn-danger').trigger('mouseleave');
+                    previewButton.toggleClass('active alert').trigger('mouseleave');
                 })
                 .on('mouseleave', function() {
                     if (!previewButton.hasClass('active')) {
@@ -356,12 +356,12 @@ $.fn.gridEditor = function( options ) {
 
             var classGroup = $('<div class="btn-group" />').appendTo(detailsDiv);
             cssClasses.forEach(function(rowClass) {
-                var btn = $('<a class="btn btn-xs btn-default" />')
+                var btn = $('<a class="button tiny secondary hollow" />')
                     .html(rowClass.label)
                     .attr('title', rowClass.title ? rowClass.title : 'Toggle "' + rowClass.label + '" styling')
-                    .toggleClass('active btn-primary', container.hasClass(rowClass.cssClass))
+                    .toggleClass('active', container.hasClass(rowClass.cssClass))
                     .on('click', function() {
-                        btn.toggleClass('active btn-primary');
+                        btn.toggleClass('active');
                         container.toggleClass(rowClass.cssClass, btn.hasClass('active'));
                     })
                     .appendTo(classGroup)
@@ -372,7 +372,7 @@ $.fn.gridEditor = function( options ) {
         }
 
         function addAllColClasses() {
-            canvas.find('.column, div[class*="col-"]').each(function() {
+            canvas.find('.column, div[class*="columns "]').each(function() {
                 var col = $(this);
 
                 var size = 2;
