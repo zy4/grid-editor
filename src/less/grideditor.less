@@ -164,9 +164,9 @@
 
 /* Layout modes */
 
-.layoutMode(phone, test, small, medium, large, 450px);
-.layoutMode(tablet, test, small, medium, large, 800px);
-.layoutMode(desktop, test, small, medium, large, none);
+.layoutMode(phone, large, small, medium, large, 450px);
+.layoutMode(tablet, large, small, medium, large, 800px);
+.layoutMode(desktop, large, small, medium, large, none);
 
 .layoutMode(@type, @e, @d1, @d2, @d3, @maxWidth) {
     .ge-canvas.ge-layout-@{type} {
