@@ -164,9 +164,9 @@
 
 /* Layout modes */
 
-.layoutMode(phone, xs, sm, md, lg, 450px);
-.layoutMode(tablet, sm, xs, md, lg, 800px);
-.layoutMode(desktop, md, xs, sm, lg, none);
+.layoutMode(phone, test, small, medium, large, 450px);
+.layoutMode(tablet, test, small, medium, large, 800px);
+.layoutMode(desktop, test, small, medium, large, none);
 
 .layoutMode(@type, @e, @d1, @d2, @d3, @maxWidth) {
     .ge-canvas.ge-layout-@{type} {
@@ -179,16 +179,16 @@
 }
 
 .disable-columns(@d1, @d2, @d3, @i: 1) when (@i =< 12) {
-  .col-@{d1}-@{i},
-  .col-@{d2}-@{i},
-  .col-@{d3}-@{i} {
+  .columns @{d1}-@{i},
+  .columns @{d2}-@{i},
+  .columns @{d3}-@{i} {
     width: inherit;
   }
   .disable-columns(@d1, @d2, @d3, (@i + 1));
 }
 
 .generate-columns(@e, @i: 1) when (@i =< 12) {
-  .col-@{e}-@{i} {
+  .columns @{e}-@{i} {
     width: @i * 8.33333333333%;
   }
   .generate-columns(@e, (@i + 1));

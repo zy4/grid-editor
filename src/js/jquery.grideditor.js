@@ -97,9 +97,9 @@ $.fn.gridEditor = function( options ) {
             var wrapper = $('<div class="ge-wrapper ge-top" />').appendTo(mainControls);
 
             // Add row
-            addRowGroup = $('<div class="ge-addRowGroup btn-group" />').appendTo(wrapper);
+            addRowGroup = $('<div class="ge-addRowGroup button-group" />').appendTo(wrapper);
             $.each(settings.new_row_layouts, function(j, layout) {
-                var btn = $('<a class="btn btn-xs btn-primary" />')
+                var btn = $('<a class="button tiny" />')
                     .attr('title', 'Add row ' + layout.join('-'))
                     .on('click', function() {
                         var row = createRow().appendTo(canvas);
@@ -159,7 +159,7 @@ $.fn.gridEditor = function( options ) {
                         canvas.hide();
                     }
 
-                    htmlButton.toggleClass('active btn-danger');
+                    htmlButton.toggleClass('active alert');
                 })
                 .appendTo(btnGroup)
             ;
@@ -354,9 +354,9 @@ $.fn.gridEditor = function( options ) {
                 .appendTo(detailsDiv)
             ;
 
-            var classGroup = $('<div class="btn-group" />').appendTo(detailsDiv);
+            var classGroup = $('<div class="button-group" />').appendTo(detailsDiv);
             cssClasses.forEach(function(rowClass) {
-                var btn = $('<a class="button tiny secondary hollow" />')
+                var btn = $('<a class="button tiny" />')
                     .html(rowClass.label)
                     .attr('title', rowClass.title ? rowClass.title : 'Toggle "' + rowClass.label + '" styling')
                     .toggleClass('active', container.hasClass(rowClass.cssClass))
