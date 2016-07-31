@@ -29,8 +29,8 @@ $.fn.gridEditor = function( options ) {
         // Wrap content if it is non-foundation
         if (baseElem.children().length && !baseElem.find('div.row').length) {
             var children = baseElem.children();
-            var newRow = $('<div class="row"><div class="large-12 columns"/></div>').appendTo(baseElem);
-            newRow.find('large-12 columns').append(children);
+            var newRow = $('<div class="row"><div class="columns large-12"/></div>').appendTo(baseElem);
+            newRow.find('columns large-12').append(children);
         }
 
         var settings = $.extend({
@@ -248,7 +248,7 @@ $.fn.gridEditor = function( options ) {
                 if (row.find('> .ge-tools-drawer').length) { return; }
 
                 var drawer = $('<div class="ge-tools-drawer" />').prependTo(row);
-                createTool(drawer, 'Move', 'ge-move', 'fi-check');
+                createTool(drawer, 'Move', 'ge-move', 'fi-arrows-out');
                 createTool(drawer, 'Settings', '', 'fi-widget', function() {
                     details.toggle();
                 });
@@ -260,7 +260,7 @@ $.fn.gridEditor = function( options ) {
                         row.remove();
                     });
                 });
-                createTool(drawer, 'Add column', 'ge-add-column', 'fi-plus-sign', function() {
+                createTool(drawer, 'Add column', 'ge-add-column', 'fi-plus', function() {
                     row.append(createColumn(3));
                     init();
                 });
@@ -276,7 +276,7 @@ $.fn.gridEditor = function( options ) {
 
                 var drawer = $('<div class="ge-tools-drawer" />').prependTo(col);
 
-                createTool(drawer, 'Move', 'ge-move', 'fi-check');
+                createTool(drawer, 'Move', 'ge-move', 'fi-arrows-out');
 
                 createTool(drawer, 'Make column narrower\n(hold shift for min)', 'ge-decrease-col-width', 'fi-minus', function(e) {
                     var colSizes = settings.valid_col_sizes;
@@ -319,7 +319,7 @@ $.fn.gridEditor = function( options ) {
                     });
                 });
 
-                createTool(drawer, 'Add row', 'ge-add-row', 'fi-plus-sign', function() {
+                createTool(drawer, 'Add row', 'ge-add-row', 'fi-plus', function() {
                     var row = createRow();
                     col.append(row);
                     row.append(createColumn(6)).append(createColumn(6));
@@ -331,7 +331,7 @@ $.fn.gridEditor = function( options ) {
         }
 
         function createTool(drawer, title, className, iconClass, eventHandlers) {
-            var tool = $('<a title="' + title + '" class="' + className + '"><span class="fi-' + iconClass + '"></span></a>')
+            var tool = $('<a title="' + title + '" class="' + className + '"><span class="' + iconClass + '"></span></a>')
                 .appendTo(drawer)
             ;
             if (typeof eventHandlers == 'function') {
