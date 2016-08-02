@@ -26,11 +26,11 @@ $.fn.gridEditor = function( options ) {
     self.each(function(baseIndex, baseElem) {
         baseElem = $(baseElem);
         
-        // Wrap content if it is non-foundation
+        // Wrap content if it is non-bootstrap
         if (baseElem.children().length && !baseElem.find('div.row').length) {
             var children = baseElem.children();
             var newRow = $('<div class="row"><div class="columns large-12"/></div>').appendTo(baseElem);
-            newRow.find('columns large-12').append(children);
+            newRow.find('.columns large-12').append(children);
         }
 
         var settings = $.extend({
@@ -66,7 +66,7 @@ $.fn.gridEditor = function( options ) {
             addRowGroup,
             htmlTextArea
         ;
-        var colClasses = ['columns large-', 'columns medium-', 'columns small-'];
+        var colClasses = ['large-', 'medium-', 'small-'];
         var curColClassIndex = 0; // Index of the column class we are manipulating currently
         var MAX_COL_SIZE = 12;
 
@@ -76,6 +76,7 @@ $.fn.gridEditor = function( options ) {
         function setup() {
             /* Setup canvas */
             canvas = baseElem.addClass('ge-canvas');
+            
 
             if (settings.source_textarea) {
                 var sourceEl = $(settings.source_textarea);
@@ -89,17 +90,17 @@ $.fn.gridEditor = function( options ) {
             }
             
             if (typeof htmlTextArea === 'undefined' || !htmlTextArea.length) {
-                htmlTextArea = $('<textarea class="ge-html-output"/>').insertBefore(canvas);
+                htmlTextArea = $('<textarea id="test2" class="ge-html-output"/>').insertBefore(canvas);
             }
 
             /* Create main controls*/
-            mainControls = $('<div class="ge-mainControls" />').insertBefore(htmlTextArea);
+            mainControls = $('<div class="row ge-mainControls" style="padding: 0 15px 0 15px;" />').insertBefore(htmlTextArea);
             var wrapper = $('<div class="ge-wrapper ge-top" />').appendTo(mainControls);
 
             // Add row
             addRowGroup = $('<div class="ge-addRowGroup button-group" />').appendTo(wrapper);
             $.each(settings.new_row_layouts, function(j, layout) {
-                var btn = $('<a class="button tiny" />')
+                var btn = $('<a class="button secondary tiny" />')
                     .attr('title', 'Add row ' + layout.join('-'))
                     .on('click', function() {
                         var row = createRow().appendTo(canvas);
@@ -123,9 +124,8 @@ $.fn.gridEditor = function( options ) {
             });
 
             // Buttons on right
-            var layoutDropdown = $('<div class="dropdown right ge-layout-mode">' +
-                '<button type="button" class="button tiny dropdown-toggle" data-toggle="dropdown"><span>Desktop</span></button>' +
-                '<ul class="dropdown-menu" role="menu">' +
+            var layoutDropdown = $('<button class="right button ge-layout-mode" data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">Screen Size</button>' +
+                '<ul id="drop1" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">' +
                     '<li><a data-width="auto" title="Desktop"><span>Desktop</span></a></li>' +
                     '<li><a title="Tablet"><span>Tablet</span></li>' +
                     '<li><a title="Phone"><span>Phone</span></a></li>' +
@@ -140,10 +140,10 @@ $.fn.gridEditor = function( options ) {
                 })
                 .appendTo(wrapper)
             ;
-            var btnGroup = $('<div class="button-group right"/>')
+            var btnGroup = $('<div class="button-group right stickycontrols"/>')
                 .appendTo(wrapper)
             ;
-            var htmlButton = $('<button title="Edit Source Code" type="button" class="button tiny gm-edit-mode"><span class="fi-arrow-left"></span><span class="fi-arrow-right"></span></button>')
+            var htmlButton = $('<button title="Edit Source Code" type="button" class="button gm-edit-mode"><span class="fa fa-chevron-left"></span><span class="fa fa-chevron-right"></span></button>')
                 .on('click', function() {
                     if (htmlButton.hasClass('active')) {
                         canvas.empty().html(htmlTextArea.val()).show();
@@ -159,16 +159,16 @@ $.fn.gridEditor = function( options ) {
                         canvas.hide();
                     }
 
-                    htmlButton.toggleClass('active alert');
+                    htmlButton.toggleClass('active btn-danger');
                 })
                 .appendTo(btnGroup)
             ;
-            var previewButton = $('<button title="Preview" type="button" class="button tiny gm-preview"><span class="fi-eye"></span></button>')
+            var previewButton = $('<button title="Preview" type="button" class="button gm-preview"><span class="fa fa-eye"></span></button>')
                 .on('mouseenter', function() {
                     canvas.removeClass('ge-editing');
                 })
                 .on('click', function() {
-                    previewButton.toggleClass('active alert').trigger('mouseleave');
+                    previewButton.toggleClass('active btn-danger').trigger('mouseleave');
                 })
                 .on('mouseleave', function() {
                     if (!previewButton.hasClass('active')) {
@@ -248,19 +248,19 @@ $.fn.gridEditor = function( options ) {
                 if (row.find('> .ge-tools-drawer').length) { return; }
 
                 var drawer = $('<div class="ge-tools-drawer" />').prependTo(row);
-                createTool(drawer, 'Move', 'ge-move', 'fi-arrows-out');
-                createTool(drawer, 'Settings', '', 'fi-widget', function() {
-                    details.toggle();
-                });
+                createTool(drawer, 'Move', 'ge-move', 'fa fa-arrows');
+                //createTool(drawer, 'Settings', '', 'fa fa-cog', function() {
+                //    details.toggle();
+                //});
                 settings.row_tools.forEach(function(t) {
-                    createTool(drawer, t.title || '', t.className || '', t.iconClass || 'fi-wrench', t.on);
+                    createTool(drawer, t.title || '', t.className || '', t.iconClass || 'fa fa-wrench', t.on);
                 });
-                createTool(drawer, 'Remove row', '', 'fi-trash', function() {
+                createTool(drawer, 'Remove row', '', 'fa fa-trash', function() {
                     row.slideUp(function() {
                         row.remove();
                     });
                 });
-                createTool(drawer, 'Add column', 'ge-add-column', 'fi-plus', function() {
+                createTool(drawer, 'Add column', 'ge-add-column', 'fa fa-plus-circle', function() {
                     row.append(createColumn(3));
                     init();
                 });
@@ -270,15 +270,15 @@ $.fn.gridEditor = function( options ) {
         }
 
         function createColControls() {
-            canvas.find('.column').each(function() {
+            canvas.find('.columns').each(function() { // changed
                 var col = $(this);
                 if (col.find('> .ge-tools-drawer').length) { return; }
 
                 var drawer = $('<div class="ge-tools-drawer" />').prependTo(col);
 
-                createTool(drawer, 'Move', 'ge-move', 'fi-arrows-out');
+                createTool(drawer, 'Move', 'ge-move', 'fa fa-arrows');
 
-                createTool(drawer, 'Make column narrower\n(hold shift for min)', 'ge-decrease-col-width', 'fi-minus', function(e) {
+                createTool(drawer, 'Make column narrower\n(hold shift for min)', 'ge-decrease-col-width', 'fa fa-minus', function(e) {
                     var colSizes = settings.valid_col_sizes;
                     var curColClass = colClasses[curColClassIndex];
                     var curColSizeIndex = colSizes.indexOf(getColSize(col, curColClass));
@@ -289,7 +289,7 @@ $.fn.gridEditor = function( options ) {
                     setColSize(col, curColClass, Math.max(newSize, 1));
                 });
 
-                createTool(drawer, 'Make column wider\n(hold shift for max)', 'ge-increase-col-width', 'fi-plus', function(e) {
+                createTool(drawer, 'Make column wider\n(hold shift for max)', 'ge-increase-col-width', 'fa fa-plus', function(e) {
                     var colSizes = settings.valid_col_sizes;
                     var curColClass = colClasses[curColClassIndex];
                     var curColSizeIndex = colSizes.indexOf(getColSize(col, curColClass));
@@ -301,15 +301,15 @@ $.fn.gridEditor = function( options ) {
                     setColSize(col, curColClass, Math.min(newSize, MAX_COL_SIZE));
                 });
 
-                createTool(drawer, 'Settings', '', 'fi-widget', function() {
-                    details.toggle();
-                });
+                //createTool(drawer, 'Settings', '', 'fa fa-cog', function() {
+                //    details.toggle();
+                //});
                 
                 settings.col_tools.forEach(function(t) {
-                    createTool(drawer, t.title || '', t.className || '', t.iconClass || 'fi-wrench', t.on);
+                    createTool(drawer, t.title || '', t.className || '', t.iconClass || 'fa fa-wrench', t.on);
                 });
 
-                createTool(drawer, 'Remove col', '', 'fi-trash', function() {
+                createTool(drawer, 'Remove col', '', 'fa fa-trash', function() {
                     col.animate({
                         opacity: 'hide',
                         width: 'hide',
@@ -319,9 +319,10 @@ $.fn.gridEditor = function( options ) {
                     });
                 });
 
-                createTool(drawer, 'Add row', 'ge-add-row', 'fi-plus', function() {
+                createTool(drawer, 'Add row', 'ge-add-row', 'fa fa-plus-circle', function() {
                     var row = createRow();
                     col.append(row);
+                    //console.log('Test'+JSON.stringify(row));
                     row.append(createColumn(6)).append(createColumn(6));
                     init();
                 });
@@ -354,14 +355,14 @@ $.fn.gridEditor = function( options ) {
                 .appendTo(detailsDiv)
             ;
 
-            var classGroup = $('<div class="button-group" />').appendTo(detailsDiv);
+            var classGroup = $('<div class="btn-group" />').appendTo(detailsDiv);
             cssClasses.forEach(function(rowClass) {
-                var btn = $('<a class="button tiny" />')
+                var btn = $('<a class="btn btn-xs btn-default" />')
                     .html(rowClass.label)
                     .attr('title', rowClass.title ? rowClass.title : 'Toggle "' + rowClass.label + '" styling')
-                    .toggleClass('active', container.hasClass(rowClass.cssClass))
+                    .toggleClass('active btn-primary', container.hasClass(rowClass.cssClass))
                     .on('click', function() {
-                        btn.toggleClass('active');
+                        btn.toggleClass('active btn-primary');
                         container.toggleClass(rowClass.cssClass, btn.hasClass('active'));
                     })
                     .appendTo(classGroup)
@@ -372,7 +373,7 @@ $.fn.gridEditor = function( options ) {
         }
 
         function addAllColClasses() {
-            canvas.find('.column, div[class*="columns "]').each(function() {
+            canvas.find('.columns, div[class*=""]').each(function() { // changed
                 var col = $(this);
 
                 var size = 2;
@@ -388,7 +389,7 @@ $.fn.gridEditor = function( options ) {
                     }
                 });
 
-                col.addClass('column');
+                col.addClass('columns'); //*****************CHANGED
             });
         }
 
@@ -436,15 +437,15 @@ $.fn.gridEditor = function( options ) {
 
         function makeSortable() {
             canvas.find('.row').sortable({
-                items: '> .column',
+                items: '> .columns', //****************** CHANGED
                 connectWith: '.ge-canvas .row',
                 handle: '> .ge-tools-drawer .ge-move',
                 start: sortStart,
                 helper: 'clone',
             });
-            canvas.add(canvas.find('.column')).sortable({
+            canvas.add(canvas.find('.columns')).sortable({ // TOOO
                 items: '> .row, > .ge-content',
-                connectsWith: '.ge-canvas, .ge-canvas .column',
+                connectsWith: '.ge-canvas, .ge-canvas .columns', // TOO
                 handle: '> .ge-tools-drawer .ge-move',
                 start: sortStart,
                 helper: 'clone',
@@ -456,7 +457,7 @@ $.fn.gridEditor = function( options ) {
         }
 
         function removeSortable() {
-            canvas.add(canvas.find('.column')).add(canvas.find('.row')).sortable('destroy');
+            canvas.add(canvas.find('.columns')).add(canvas.find('.row')).sortable('destroy'); // TOO
         }
 
         function createRow() {
@@ -466,10 +467,15 @@ $.fn.gridEditor = function( options ) {
         function createColumn(size) {
             return $('<div/>')
                 .addClass(colClasses.map(function(c) { return c + size; }).join(' '))
+                .addClass("columns")
                 .append(createDefaultContentWrapper().html(
                     getRTE(settings.content_types[0]).initialContent)
                 )
             ;
+        }
+
+        function addColumnsClass() {
+
         }
 
         /**
@@ -491,7 +497,7 @@ $.fn.gridEditor = function( options ) {
          * Wrap column content in <div class="ge-content"> where neccesary
          */
         function wrapContent() {
-            canvas.find('.column').each(function() {
+            canvas.find('.columns').each(function() { // ********** CHANGED
                 var col = $(this);
                 var contents = $();
                 col.children().each(function() {
